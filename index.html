@@ -2,11 +2,26 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               viewport-fit=cover,
+               maximum-scale=1.0,
+               user-scalable=no">
+
+<meta name="theme-color" content="#6366f1">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="English Vocabulary Match">
+
+<meta name="mobile-web-app-capable" content="yes">
 
 <title>English Vocabulary Match</title>
 
 <style>
+
 :root {
   --bg1:#eef6ff;
   --bg2:#f8f2ff;
@@ -22,20 +37,51 @@
 
 * {
   box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html {
+  width:100%;
+  min-height:100%;
+  touch-action:manipulation;
 }
 
 body {
   margin:0;
   min-height:100vh;
+  min-height:100dvh;
+
   font-family:Arial, sans-serif;
   color:var(--text);
-  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--bg1),
+      var(--bg2)
+    );
+
+  overscroll-behavior:none;
+  touch-action:manipulation;
+}
+
+button {
+  font-family:inherit;
+  -webkit-appearance:none;
+  appearance:none;
+  touch-action:manipulation;
 }
 
 .container {
+  width:100%;
   max-width:1200px;
+
   margin:auto;
-  padding:28px 18px 50px;
+
+  padding:
+    max(20px, env(safe-area-inset-top))
+    18px
+    max(40px, env(safe-area-inset-bottom));
 }
 
 header {
@@ -57,6 +103,7 @@ h1 {
   background:rgba(255,255,255,.9);
   border-radius:24px;
   box-shadow:var(--shadow);
+
   padding:22px;
   margin-bottom:20px;
 }
@@ -64,6 +111,10 @@ h1 {
 .hidden {
   display:none !important;
 }
+
+/* =========================
+   DIFFICULTY BUTTONS
+========================= */
 
 .levels {
   display:grid;
@@ -74,24 +125,44 @@ h1 {
 .level-btn {
   border:0;
   border-radius:18px;
+
   padding:18px;
+
   background:white;
-  box-shadow:0 7px 20px rgba(0,0,0,.08);
+
+  box-shadow:
+    0 7px 20px rgba(0,0,0,.08);
+
   cursor:pointer;
+
   font-size:18px;
   font-weight:800;
-  transition:.2s;
+
+  transition:
+    transform .2s,
+    box-shadow .2s;
+
+  min-height:80px;
+
+  touch-action:manipulation;
 }
 
 .level-btn:hover {
   transform:translateY(-3px);
 }
 
+.level-btn:active {
+  transform:scale(.97);
+}
+
 .level-btn span {
   display:block;
+
   font-size:13px;
   color:var(--muted);
+
   font-weight:500;
+
   margin-top:5px;
 }
 
@@ -104,70 +175,137 @@ h1 {
   color:var(--text);
 }
 
+/* =========================
+   TOP BAR
+========================= */
+
 .topbar {
   display:flex;
+
   gap:10px;
+
   align-items:center;
   justify-content:space-between;
+
   flex-wrap:wrap;
 }
 
 .stats {
   display:flex;
+
   gap:10px;
+
   flex-wrap:wrap;
 }
 
 .stat {
   background:#f8fafc;
+
   border-radius:14px;
+
   padding:10px 14px;
+
   font-weight:700;
 }
 
 .control {
   border:0;
+
   border-radius:12px;
-  padding:10px 14px;
+
+  padding:11px 15px;
+
   background:#e2e8f0;
+
   cursor:pointer;
+
   font-weight:700;
+
+  min-height:44px;
+
+  touch-action:manipulation;
 }
+
+.control:active {
+  transform:scale(.96);
+}
+
+/* =========================
+   PROGRESS
+========================= */
 
 .progress {
   height:10px;
+
   background:#e2e8f0;
+
   border-radius:99px;
+
   overflow:hidden;
+
   margin-top:15px;
 }
 
 .progress i {
   display:block;
+
   height:100%;
+
   width:0;
-  background:linear-gradient(90deg,var(--primary),var(--primary2));
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--primary),
+      var(--primary2)
+    );
+
   transition:.3s;
 }
 
+/* =========================
+   GAME BOARD
+========================= */
+
 .board {
   display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
+
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+
   gap:12px;
+
+  width:100%;
 }
 
 .card {
   perspective:1000px;
+
   min-height:145px;
+
   cursor:pointer;
+
+  position:relative;
+
+  touch-action:manipulation;
+
+  user-select:none;
+  -webkit-user-select:none;
+
+  -webkit-touch-callout:none;
 }
 
 .card-inner {
   position:relative;
+
   width:100%;
   height:100%;
+
   min-height:145px;
-  transition:transform .45s;
+
+  transition:
+    transform .45s;
+
   transform-style:preserve-3d;
 }
 
@@ -178,28 +316,49 @@ h1 {
 
 .face {
   position:absolute;
+
   inset:0;
+
   backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+
   border-radius:18px;
+
   display:flex;
+
   align-items:center;
   justify-content:center;
+
   text-align:center;
+
   padding:14px;
-  box-shadow:0 7px 18px rgba(15,23,42,.10);
+
+  box-shadow:
+    0 7px 18px rgba(15,23,42,.10);
 }
 
 .front {
-  background:linear-gradient(145deg,#6366f1,#8b5cf6);
+  background:
+    linear-gradient(
+      145deg,
+      #6366f1,
+      #8b5cf6
+    );
+
   color:white;
+
   font-size:36px;
+
   font-weight:900;
 }
 
 .back {
   background:white;
+
   transform:rotateY(180deg);
+
   flex-direction:column;
+
   gap:8px;
 }
 
@@ -215,17 +374,21 @@ h1 {
 
 .pos {
   font-size:11px;
+
   color:var(--muted);
+
   text-transform:uppercase;
 }
 
 .card.correct .back {
   background:#dcfce7;
+
   border:3px solid var(--green);
 }
 
 .card.wrong .back {
   background:#fee2e2;
+
   border:3px solid var(--red);
 }
 
@@ -233,25 +396,62 @@ h1 {
   cursor:default;
 }
 
+/* =========================
+   MESSAGE
+========================= */
+
 .message {
   text-align:center;
+
   font-weight:800;
+
   min-height:25px;
+
   margin:15px 0 0;
 }
 
+/* =========================
+   NEXT BUTTON
+========================= */
+
 .next {
   display:block;
+
   margin:20px auto 0;
-  background:linear-gradient(90deg,var(--primary),var(--primary2));
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--primary),
+      var(--primary2)
+    );
+
   color:white;
+
   border:0;
+
   border-radius:14px;
+
   padding:13px 25px;
+
   font-weight:900;
+
   font-size:16px;
+
   cursor:pointer;
+
+  min-height:48px;
+
+  touch-action:manipulation;
 }
+
+.next:active {
+  transform:scale(.96);
+}
+
+/* =========================
+   FINAL SCREEN
+========================= */
 
 .final {
   text-align:center;
@@ -263,23 +463,57 @@ h1 {
 
 .score-big {
   font-size:58px;
+
   font-weight:1000;
+
   color:var(--primary);
 }
 
+/* =========================
+   TABLET
+========================= */
+
 @media(max-width:850px) {
+
   .board {
-    grid-template-columns:repeat(4,minmax(0,1fr));
+    grid-template-columns:
+      repeat(4,minmax(0,1fr));
   }
+
 }
 
+/* =========================
+   PHONE
+========================= */
+
 @media(max-width:600px) {
+
+  .container {
+    padding-left:12px;
+    padding-right:12px;
+  }
+
+  .panel {
+    padding:16px;
+
+    border-radius:20px;
+  }
+
   .levels {
     grid-template-columns:1fr;
   }
 
+  .level-btn {
+    min-height:72px;
+
+    font-size:17px;
+  }
+
   .board {
-    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+
+    gap:9px;
   }
 
   .card,
@@ -290,7 +524,106 @@ h1 {
   .front {
     font-size:28px;
   }
+
+  .word {
+    font-size:16px;
+  }
+
+  .definition {
+    font-size:13px;
+  }
+
+  .topbar {
+    align-items:stretch;
+  }
+
+  .stats {
+    width:100%;
+  }
+
+  .stat {
+    flex:1;
+
+    text-align:center;
+
+    padding:9px 7px;
+
+    font-size:14px;
+  }
+
+  .control {
+    width:100%;
+  }
+
 }
+
+/* =========================
+   VERY SMALL PHONES
+========================= */
+
+@media(max-width:380px) {
+
+  .card,
+  .card-inner {
+    min-height:110px;
+  }
+
+  .front {
+    font-size:25px;
+  }
+
+  .word {
+    font-size:14px;
+  }
+
+  .definition {
+    font-size:12px;
+  }
+
+  .pos {
+    font-size:9px;
+  }
+
+}
+
+/* =========================
+   LANDSCAPE PHONES
+========================= */
+
+@media(
+  max-width:900px
+) and (
+  orientation:landscape
+) {
+
+  .board {
+    grid-template-columns:
+      repeat(4,minmax(0,1fr));
+  }
+
+  .card,
+  .card-inner {
+    min-height:110px;
+  }
+
+}
+
+/* =========================
+   REDUCE MOTION
+========================= */
+
+@media(prefers-reduced-motion:reduce) {
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior:auto !important;
+    transition-duration:0.01ms !important;
+    animation-duration:0.01ms !important;
+  }
+
+}
+
 </style>
 </head>
 
@@ -299,14 +632,19 @@ h1 {
 <div class="container">
 
 <header>
-  <h1>📚 English Vocabulary Match</h1>
-  <p class="subtitle">
-    Match each English word with its correct definition.
-  </p>
+
+<h1>📚 English Vocabulary Match</h1>
+
+<p class="subtitle">
+Match each English word with its correct definition.
+</p>
+
 </header>
 
 
-<!-- HOME SCREEN -->
+<!-- =========================
+     HOME SCREEN
+========================= -->
 
 <section id="home" class="panel">
 
@@ -314,19 +652,45 @@ h1 {
 
 <div class="levels">
 
-<button class="level-btn" onclick="startGame('easy')">
+<button
+  class="level-btn"
+  type="button"
+  onclick="startGame('easy')">
+
 🟢 Easy
-<span>Round 1: 12 pairs · Round 2: 20 pairs</span>
+
+<span>
+Round 1: 12 pairs · Round 2: 20 pairs
+</span>
+
 </button>
 
-<button class="level-btn" onclick="startGame('medium')">
+
+<button
+  class="level-btn"
+  type="button"
+  onclick="startGame('medium')">
+
 🟡 Medium
-<span>Round 1: 30 pairs · Round 2: 35 pairs</span>
+
+<span>
+Round 1: 30 pairs · Round 2: 35 pairs
+</span>
+
 </button>
 
-<button class="level-btn" onclick="startGame('hard')">
+
+<button
+  class="level-btn"
+  type="button"
+  onclick="startGame('hard')">
+
 🔴 Hard
-<span>Round 1: 29 pairs · Round 2: 29 pairs</span>
+
+<span>
+Round 1: 29 pairs · Round 2: 29 pairs
+</span>
+
 </button>
 
 </div>
@@ -337,23 +701,33 @@ h1 {
 <h3>How to Play</h3>
 
 <p>
-<b>1.</b> Choose a difficulty and start the round.
+<b>1.</b>
+Choose a difficulty and start the round.
 </p>
 
 <p>
-<b>2.</b> Click two cards: one vocabulary word and one definition.
+<b>2.</b>
+Click or tap two cards:
+one vocabulary word and one definition.
 </p>
 
 <p>
-<b>3.</b> Correct match = <b>+5 points</b> and the cards turn green.
+<b>3.</b>
+Correct match =
+<b>+5 points</b>
+and the cards turn green.
 </p>
 
 <p>
-<b>4.</b> Wrong match = <b>-2 points</b> and the cards turn red.
+<b>4.</b>
+Wrong match =
+<b>-2 points</b>
+and the cards turn red.
 </p>
 
 <p>
-<b>5.</b> Match all pairs to finish the round.
+<b>5.</b>
+Match all pairs to finish the round.
 Your score carries over to the next round.
 </p>
 
@@ -362,7 +736,9 @@ Your score carries over to the next round.
 </section>
 
 
-<!-- GAME SCREEN -->
+<!-- =========================
+     GAME SCREEN
+========================= -->
 
 <section id="game" class="hidden">
 
@@ -374,7 +750,10 @@ Your score carries over to the next round.
 
 <strong id="levelTitle"></strong>
 
-<div id="roundTitle" class="subtitle"></div>
+<div
+  id="roundTitle"
+  class="subtitle">
+</div>
 
 </div>
 
@@ -382,66 +761,119 @@ Your score carries over to the next round.
 <div class="stats">
 
 <div class="stat">
+
 ⭐ Score:
-<span id="score">0</span>
+
+<span id="score">
+0
+</span>
+
 </div>
+
 
 <div class="stat">
+
 🎯 Matches:
-<span id="matches">0</span> /
-<span id="total">0</span>
-</div>
+
+<span id="matches">
+0
+</span>
+
+/
+
+<span id="total">
+0
+</span>
 
 </div>
 
+</div>
 
-<button class="control" onclick="goHome()">
+
+<button
+  class="control"
+  type="button"
+  onclick="goHome()">
+
 ← Menu
+
 </button>
 
 </div>
 
 
 <div class="progress">
+
 <i id="progressBar"></i>
+
 </div>
 
 
-<div id="message" class="message">
+<div
+  id="message"
+  class="message">
+
 Find the matching word and definition.
-</div>
 
 </div>
 
+</div>
 
-<div id="board" class="board"></div>
+
+<div
+  id="board"
+  class="board">
+</div>
 
 
-<button id="nextBtn"
-class="next hidden"
-onclick="nextRound()">
+<button
+  id="nextBtn"
+  class="next hidden"
+  type="button"
+  onclick="nextRound()">
+
 Continue →
+
 </button>
 
 </section>
 
 
-<!-- FINAL SCREEN -->
+<!-- =========================
+     FINAL SCREEN
+========================= -->
 
-<section id="final" class="panel final hidden">
+<section
+  id="final"
+  class="panel final hidden">
 
-<h2>🎉 Game Complete!</h2>
+<h2>
+🎉 Game Complete!
+</h2>
 
-<p>You finished both rounds.</p>
+<p>
+You finished both rounds.
+</p>
 
-<div class="score-big" id="finalScore">
+<div
+  class="score-big"
+  id="finalScore">
+
 0
+
 </div>
 
-<p>points</p>
+<p>
+points
+</p>
 
-<button class="next" onclick="goHome()">
+<button
+  class="next"
+  type="button"
+  onclick="goHome()">
+
 Play Again
+
 </button>
 
 </section>
@@ -1185,18 +1617,28 @@ definition:"to make something stronger"
 ========================================== */
 
 const ROUND_SIZES = {
+
   easy:[12,20],
+
   medium:[30,35],
+
   hard:[29,29]
+
 };
 
 
 let level = null;
+
 let round = 0;
+
 let score = 0;
+
 let matches = 0;
+
 let selected = [];
+
 let locked = false;
+
 let available = [];
 
 
@@ -1208,11 +1650,19 @@ function shuffle(array) {
 
   const a = [...array];
 
-  for(let i=a.length-1;i>0;i--) {
+  for(
+    let i = a.length - 1;
+    i > 0;
+    i--
+  ) {
 
-    const j=Math.floor(Math.random()*(i+1));
+    const j =
+      Math.floor(
+        Math.random() * (i + 1)
+      );
 
-    [a[i],a[j]]=[a[j],a[i]];
+    [a[i],a[j]] =
+      [a[j],a[i]];
 
   }
 
@@ -1247,6 +1697,7 @@ function startGame(chosen) {
     .classList.remove("hidden");
 
   startRound();
+
 }
 
 
@@ -1262,37 +1713,49 @@ function startRound() {
 
   locked = false;
 
-  const size = ROUND_SIZES[level][round];
+  const size =
+    ROUND_SIZES[level][round];
 
-  const chosen = available.splice(0,size);
+  const chosen =
+    available.splice(0,size);
 
   renderBoard(chosen);
 
-  document.getElementById("levelTitle")
+  document
+    .getElementById("levelTitle")
     .textContent =
-    level[0].toUpperCase()+level.slice(1)+" Level";
+      level[0].toUpperCase()
+      + level.slice(1)
+      + " Level";
 
-  document.getElementById("roundTitle")
+  document
+    .getElementById("roundTitle")
     .textContent =
-    `Round ${round+1} of 2 · Match ${size} pairs`;
+      `Round ${round + 1} of 2 · Match ${size} pairs`;
 
-  document.getElementById("score")
+  document
+    .getElementById("score")
     .textContent = score;
 
-  document.getElementById("matches")
+  document
+    .getElementById("matches")
     .textContent = matches;
 
-  document.getElementById("total")
+  document
+    .getElementById("total")
     .textContent = size;
 
-  document.getElementById("message")
+  document
+    .getElementById("message")
     .textContent =
-    "Find the matching word and definition.";
+      "Find the matching word and definition.";
 
-  document.getElementById("nextBtn")
+  document
+    .getElementById("nextBtn")
     .classList.add("hidden");
 
   updateProgress();
+
 }
 
 
@@ -1304,62 +1767,84 @@ function renderBoard(pairs) {
 
   const cards = [];
 
-  pairs.forEach((item,index) => {
+  pairs.forEach(
+    (item,index) => {
 
-    cards.push({
-      pair:index,
-      type:"word",
-      content:item.word,
-      item:item
-    });
+      cards.push({
 
-    cards.push({
-      pair:index,
-      type:"definition",
-      content:item.definition,
-      item:item
-    });
+        pair:index,
 
-  });
+        type:"word",
+
+        content:item.word,
+
+        item:item
+
+      });
 
 
-  const shuffled = shuffle(cards);
+      cards.push({
+
+        pair:index,
+
+        type:"definition",
+
+        content:item.definition,
+
+        item:item
+
+      });
+
+    }
+  );
+
+
+  const shuffled =
+    shuffle(cards);
 
   const board =
     document.getElementById("board");
 
+
   board.innerHTML =
-    shuffled.map((card,index) => `
+    shuffled.map(
+      (card,index) => `
 
-      <div
-        class="card"
-        data-pair="${card.pair}"
-        data-type="${card.type}"
-        data-index="${index}"
-        onclick="flipCard(this)"
-      >
+        <div
+          class="card"
+          data-pair="${card.pair}"
+          data-type="${card.type}"
+          data-index="${index}"
+          data-action="flip">
 
-        <div class="card-inner">
+          <div class="card-inner">
 
-          <div class="face front">
-            ?
-          </div>
-
-          <div class="face back">
-
-            <div class="pos">
-              ${card.type === "word"
-                ? card.item.pos
-                : "definition"}
+            <div class="face front">
+              ?
             </div>
 
-            <div class="${
-              card.type === "word"
-              ? "word"
-              : "definition"
-            }">
+            <div class="face back">
 
-              ${card.content}
+              <div class="pos">
+
+                ${
+                  card.type === "word"
+                    ? card.item.pos
+                    : "definition"
+                }
+
+              </div>
+
+              <div
+                class="${
+                  card.type === "word"
+                    ? "word"
+                    : "definition"
+                }">
+
+                ${card.content}
+
+              </div>
 
             </div>
 
@@ -1367,9 +1852,16 @@ function renderBoard(pairs) {
 
         </div>
 
-      </div>
+      `
+    ).join("");
 
-    `).join("");
+
+  /*
+    Touch support:
+    Instead of relying only on onclick,
+    cards use pointer events.
+  */
+
 }
 
 
@@ -1384,18 +1876,23 @@ function flipCard(card) {
     card.classList.contains("matched") ||
     card.classList.contains("flipped")
   ) {
+
     return;
+
   }
+
 
   card.classList.add("flipped");
 
   selected.push(card);
+
 
   if(selected.length === 2) {
 
     checkMatch();
 
   }
+
 }
 
 
@@ -1409,18 +1906,22 @@ function checkMatch() {
 
   const [a,b] = selected;
 
+
   const correct =
     a.dataset.pair === b.dataset.pair &&
     a.dataset.type !== b.dataset.type;
 
 
-  /* CORRECT */
+  /* =========================
+     CORRECT
+  ========================= */
 
   if(correct) {
 
     score += 5;
 
     matches++;
+
 
     a.classList.add(
       "correct",
@@ -1432,11 +1933,15 @@ function checkMatch() {
       "matched"
     );
 
-    document.getElementById("message")
+
+    document
+      .getElementById("message")
       .textContent =
-      "✨ Correct! +5 points";
+        "✨ Correct! +5 points";
+
 
     updateUI();
+
 
     selected = [];
 
@@ -1446,7 +1951,9 @@ function checkMatch() {
     if(
       matches ===
       Number(
-        document.getElementById("total").textContent
+        document
+          .getElementById("total")
+          .textContent
       )
     ) {
 
@@ -1457,44 +1964,56 @@ function checkMatch() {
   }
 
 
-  /* WRONG */
+  /* =========================
+     WRONG
+  ========================= */
 
   else {
 
     score -= 2;
 
+
     a.classList.add("wrong");
 
     b.classList.add("wrong");
 
-    document.getElementById("message")
+
+    document
+      .getElementById("message")
       .textContent =
-      "❌ Not a match! -2 points";
+        "❌ Not a match! -2 points";
+
 
     updateUI();
 
 
-    setTimeout(() => {
+    setTimeout(
+      () => {
 
-      a.classList.remove(
-        "flipped",
-        "wrong"
-      );
+        a.classList.remove(
+          "flipped",
+          "wrong"
+        );
 
-      b.classList.remove(
-        "flipped",
-        "wrong"
-      );
+        b.classList.remove(
+          "flipped",
+          "wrong"
+        );
 
-      selected = [];
 
-      locked = false;
+        selected = [];
 
-      document.getElementById("message")
-        .textContent =
-        "Try another pair!";
+        locked = false;
 
-    },850);
+
+        document
+          .getElementById("message")
+          .textContent =
+            "Try another pair!";
+
+      },
+      850
+    );
 
   }
 
@@ -1507,13 +2026,16 @@ function checkMatch() {
 
 function updateUI() {
 
-  document.getElementById("score")
+  document
+    .getElementById("score")
     .textContent = score;
 
-  document.getElementById("matches")
+  document
+    .getElementById("matches")
     .textContent = matches;
 
   updateProgress();
+
 }
 
 
@@ -1525,13 +2047,18 @@ function updateProgress() {
 
   const total =
     Number(
-      document.getElementById("total")
-      .textContent
+      document
+        .getElementById("total")
+        .textContent
     ) || 1;
 
-  document.getElementById("progressBar")
+
+  document
+    .getElementById("progressBar")
     .style.width =
-    (matches / total * 100) + "%";
+      (matches / total * 100)
+      + "%";
+
 }
 
 
@@ -1541,18 +2068,21 @@ function updateProgress() {
 
 function finishRound() {
 
-  document.getElementById("message")
+  document
+    .getElementById("message")
     .textContent =
-    `🎉 Round complete! Score: ${score}`;
+      `🎉 Round complete! Score: ${score}`;
 
 
   if(round === 0) {
 
-    document.getElementById("nextBtn")
+    document
+      .getElementById("nextBtn")
       .textContent =
-      "Start Round 2 →";
+        "Start Round 2 →";
 
-    document.getElementById("nextBtn")
+    document
+      .getElementById("nextBtn")
       .classList.remove("hidden");
 
   }
@@ -1560,18 +2090,24 @@ function finishRound() {
 
   else {
 
-    setTimeout(() => {
+    setTimeout(
+      () => {
 
-      document.getElementById("game")
-        .classList.add("hidden");
+        document
+          .getElementById("game")
+          .classList.add("hidden");
 
-      document.getElementById("final")
-        .classList.remove("hidden");
+        document
+          .getElementById("final")
+          .classList.remove("hidden");
 
-      document.getElementById("finalScore")
-        .textContent = score;
+        document
+          .getElementById("finalScore")
+          .textContent = score;
 
-    },700);
+      },
+      700
+    );
 
   }
 
@@ -1597,16 +2133,97 @@ function nextRound() {
 
 function goHome() {
 
-  document.getElementById("game")
+  document
+    .getElementById("game")
     .classList.add("hidden");
 
-  document.getElementById("final")
+  document
+    .getElementById("final")
     .classList.add("hidden");
 
-  document.getElementById("home")
+  document
+    .getElementById("home")
     .classList.remove("hidden");
 
 }
+
+
+/* ==========================================
+   MOBILE / TOUCH SUPPORT
+   iPhone + Android + Desktop
+========================================== */
+
+document.addEventListener(
+  "pointerup",
+  function(event) {
+
+    const card =
+      event.target.closest(
+        '.card[data-action="flip"]'
+      );
+
+
+    if(!card) {
+      return;
+    }
+
+
+    /*
+      Prevent the same touch from
+      being processed twice.
+    */
+
+    event.preventDefault();
+
+    flipCard(card);
+
+  },
+  {
+    passive:false
+  }
+);
+
+
+/* ==========================================
+   PREVENT DOUBLE-TAP ZOOM
+========================================== */
+
+document.addEventListener(
+  "dblclick",
+  function(event) {
+
+    if(
+      event.target.closest(
+        ".card, button"
+      )
+    ) {
+
+      event.preventDefault();
+
+    }
+
+  },
+  {
+    passive:false
+  }
+);
+
+
+/* ==========================================
+   PHONE ROTATION SUPPORT
+========================================== */
+
+window.addEventListener(
+  "orientationchange",
+  function() {
+
+    setTimeout(
+      updateProgress,
+      100
+    );
+
+  }
+);
 
 </script>
 
