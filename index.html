@@ -1,131 +1,75 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Word Quest - Pirate Memory</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Edu+QLD+Hand:wght@400..700&family=Rye&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet"><style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Nunito,sans-serif;color:#382515;background:linear-gradient(#69c8d8 0 37%,#e5cf96 37%);padding:14px}.app{max-width:1150px;margin:auto}.logo{text-align:center;font:5rem/1 "Edu QLD Hand";color:#432b18;text-shadow:2px 3px #f2d58d}.sub{text-align:center;font-weight:900;letter-spacing:2px;margin-bottom:12px}.map{border:6px solid #76502e;border-radius:24px;background:linear-gradient(135deg,#f0d596,#fff0c2,#e5c57b);padding:16px;box-shadow:0 12px 30px #3d2b1738;position:relative;overflow:hidden}.map:before{content:"";position:absolute;inset:12px;border:2px dashed #80582e66;border-radius:17px;pointer-events:none}.route{display:flex;justify-content:space-between;max-width:850px;margin:4px auto 18px;position:relative}.route:before{content:"";position:absolute;top:30px;left:8%;right:8%;border-top:3px dashed #80582e;z-index:0}.node{width:20%;text-align:center;font-size:.75rem;font-weight:900;position:relative;z-index:1}.bubble{margin:auto;width:58px;height:58px;border:4px solid #76502e;border-radius:50%;display:grid;place-items:center;background:#d8c18b;font-size:1.6rem;box-shadow:0 4px #80582e}.node.current .bubble{background:#ffd76c;transform:scale(1.1)}.node.done .bubble{background:#83cf91}.node.locked{opacity:.45}.ship{position:absolute;left:4%;top:0;font-size:2rem;animation:sail 3s infinite alternate ease-in-out}@keyframes sail{to{left:46%}}.panel{position:relative;z-index:2;background:#fff6dccc;border:4px solid #8a5b31;border-radius:20px;padding:22px;max-width:1000px;margin:auto}h2{font-family:Rye;text-align:center;margin:4px}.intro{text-align:center;max-width:720px;margin:10px auto;line-height:1.6}.diffs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:800px;margin:18px auto}.diff{background:#fff0c5;border:3px solid #956137;border-radius:16px;padding:18px;box-shadow:0 5px #956137;cursor:pointer;text-align:left;font:inherit}.diff:hover,.diff.active{background:#ffdc7b;transform:translateY(-2px)}.diff b{font-size:1.2rem}.btn{border:0;border-radius:13px;padding:12px 19px;background:#885127;color:#fff;font-weight:900;cursor:pointer;box-shadow:0 4px #5e351b}.btn.gold{background:#d49b20;color:#33220c}.btn.green{background:#2d9d62}.btn.red{background:#c84e49}.btn:disabled{opacity:.4;cursor:not-allowed}.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.hud{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.stat{background:#fff0c5;border:3px solid #956137;border-radius:13px;text-align:center;padding:7px;font-weight:900}.stat span{display:block;font-size:1.2rem}.bar{height:14px;background:#c8a96c;border-radius:20px;padding:3px;margin:13px 0}.bar>i{display:block;height:100%;width:0;border-radius:20px;background:linear-gradient(90deg,#36a96b,#e2ad2d);transition:.3s}.info{text-align:center;font-weight:900;margin:8px}.cards{display:grid;grid-template-columns:repeat(8,1fr);gap:11px}.card{height:116px;border:0;background:none;padding:0;perspective:900px;cursor:pointer}.inner{height:100%;width:100%;position:relative;transition:.45s;transform-style:preserve-3d}.card.flip .inner,.card.matched .inner{transform:rotateY(180deg)}.face{position:absolute;inset:0;backface-visibility:hidden;border:4px solid #754923;border-radius:15px;box-shadow:0 5px #60391e;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-weight:900}.back{background:repeating-linear-gradient(45deg,#7c402d 0 9px,#934c33 9px 18px);color:#f8d77d;font-size:2rem}.front{background:#fff0c5;transform:rotateY(180deg);font-size:.83rem}.word .front{background:#ffe09b;font-size:1rem}.correct .front{background:#73ca8e!important}.wrong .front{background:#ed7770!important}@keyframes shake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}.wrong{animation:shake .3s}.result{text-align:center}.big{font-size:5rem;animation:float 2s infinite alternate}@keyframes float{to{transform:translateY(-8px)}}.scorebig{font-size:2.3rem;font-weight:900}.mini{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin:15px}.mini span{padding:7px 11px;border-radius:20px;background:#d3bd89;font-weight:900}.mini .done{background:#72c68a}.mini .now{background:#e3ad32}.hide{display:none!important}@media(max-width:850px){.cards{grid-template-columns:repeat(6,1fr)}}@media(max-width:650px){body{padding:7px}.logo{font-size:3.6rem}.map{padding:10px}.panel{padding:13px}.diffs{grid-template-columns:1fr}.cards{grid-template-columns:repeat(4,1fr);gap:8px}.card{height:100px}.face{font-size:.68rem;padding:5px;border-width:3px}.word .front{font-size:.82rem}.hud{grid-template-columns:repeat(2,1fr)}.bubble{width:45px;height:45px;font-size:1.2rem}.node{font-size:.6rem}}
-</style></head><body><div class="app"><div class="logo">Word Quest</div><div class="sub">🏴‍☠️ PIRATE MEMORY TREASURE HUNT 🗺️</div><div class="map"><div class="route"><div class="ship" id="ship">⛵</div><div class="node current" id="n1"><div class="bubble">🧭</div>Choose</div><div class="node locked" id="n2"><div class="bubble">🌴</div>Round 1</div><div class="node locked" id="n3"><div class="bubble">💀</div>Round 2</div><div class="node locked" id="n4"><div class="bubble">🏝️</div>Final Cove</div><div class="node locked" id="n5"><div class="bubble">💎</div>Treasure</div></div><section id="home" class="panel"><h2>Choose Your Adventure</h2><p class="intro">Match every English word with its correct answer. Round 1 is English word ↔ Hebrew translation. Round 2 is English word ↔ English definition. Complete both rounds to unlock the hidden treasure!</p><div class="diffs"><button class="diff active" data-d="easy"><b>🟢 Easy</b><br>Round 1: 12 pairs<br>Round 2: 20 pairs</button><button class="diff" data-d="medium"><b>🟡 Medium</b><br>Round 1: 30 pairs<br>Round 2: 35 pairs</button><button class="diff" data-d="hard"><b>🔴 Hard</b><br>Round 1: 29 pairs<br>Round 2: 29 pairs</button></div><div class="actions"><button class="btn gold" id="start">⚓ Start Round 1</button></div></section><section id="game" class="panel hide"><div class="hud"><div class="stat">⭐ Score<span id="score">0</span></div><div class="stat">🧩 Matched<span id="matched">0 / 0</span></div><div class="stat">❤️ Lives<span id="lives">3</span></div><div class="stat">🗺️ Round<span id="round">1 / 2</span></div></div><div class="bar"><i id="prog"></i></div><div class="info" id="info">Find the matching word and definition.</div><div class="cards" id="cards"></div><div class="actions" style="margin-top:17px"><button class="btn" id="restart">🔄 Restart Round</button><button class="btn" id="home">🏠 Home</button></div></section><section id="result" class="panel hide result"><div class="big" id="icon">🏝️</div><h2 id="title">Round Complete!</h2><div class="scorebig" id="rscore">0 points</div><p id="text"></p><div class="mini"><span class="done">🧭 Start</span><span id="m1">🌴 Round 1</span><span id="m2">💀 Round 2</span><span id="m3">💎 Treasure</span></div><div class="actions"><button class="btn gold" id="cont">⚓ Continue to Round 2</button><button class="btn green hide" id="again">🏆 Play Again</button><button class="btn red hide" id="retry">🔄 Restart This Round</button><button class="btn" id="rhome">🏠 Home</button></div></section></div></div>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Word Quest - Memory Game</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#e8f0ff,#f7f9ff);color:#172033;min-height:100vh}.app{max-width:1100px;margin:auto;padding:24px 16px 40px}.screen{display:none}.screen.active{display:block}.panel{background:white;border-radius:24px;padding:24px;box-shadow:0 10px 35px #17203318}.title{text-align:center;font-size:clamp(32px,7vw,58px);margin:10px 0 8px}.subtitle{text-align:center;color:#65708a;font-size:18px}.difficulty{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:25px 0}.diff{border:3px solid #dbe2f0;background:#fff;border-radius:18px;padding:18px;cursor:pointer;font-size:18px;font-weight:700}.diff.selected{border-color:#5267ff;background:#eef1ff}.diff small{display:block;font-weight:400;color:#667085;margin-top:6px}.btn{border:0;border-radius:14px;padding:14px 22px;font-size:17px;font-weight:700;cursor:pointer;background:#5267ff;color:white}.btn.secondary{background:#e9edff;color:#344054}.btn:active{transform:scale(.98)}.center{text-align:center}.stats{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:18px 0}.stat{background:#fff;border-radius:14px;padding:10px 16px;box-shadow:0 4px 14px #17203312;font-weight:700}.instructions{text-align:center;color:#667085;margin:10px auto 20px}.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.card{aspect-ratio:1/1.15;border:0;background:transparent;perspective:900px;cursor:pointer;padding:0}.inner{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}.card.flipped .inner,.card.matched .inner{transform:rotateY(180deg)}.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:15px;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;word-break:break-word}.back{background:linear-gradient(145deg,#5267ff,#7c5cff);color:#fff;font-size:30px;font-weight:800}.front{background:#fff;border:3px solid #dce2ef;transform:rotateY(180deg);font-size:clamp(11px,1.7vw,17px);font-weight:700}.card.correct .front{background:#d9f8e5;border-color:#2fb36d}.card.wrong .front{background:#ffe0e0;border-color:#e64c4c}.card.matched{cursor:default}.card.matched .front{background:#d9f8e5;border-color:#2fb36d}.message{text-align:center;min-height:28px;font-weight:700;margin:10px}.result-icon{font-size:70px}.result h2{text-align:center;font-size:38px}.result p{text-align:center;font-size:18px;color:#667085}.actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:22px}@media(max-width:750px){.grid{grid-template-columns:repeat(4,1fr);gap:8px}.difficulty{grid-template-columns:1fr}.app{padding:14px 10px}.panel{padding:18px 12px}.front{font-size:12px}.back{font-size:24px}}@media(max-width:430px){.grid{grid-template-columns:repeat(3,1fr)}.face{padding:6px}.front{font-size:11px}.back{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="app">
+<section id="home" class="screen active">
+<div class="panel">
+<h1 class="title">🧠 Word Quest</h1>
+<p class="subtitle">Vocabulary Memory Challenge</p>
+<p class="center">Match each English word with its correct answer.</p>
+<div class="difficulty">
+<button class="diff selected" data-level="easy">Easy<small>12 pairs → 20 pairs</small></button>
+<button class="diff" data-level="medium">Medium<small>30 pairs → 35 pairs</small></button>
+<button class="diff" data-level="hard">Hard<small>29 pairs → 29 pairs</small></button>
+</div>
+<div class="center"><button id="startBtn" class="btn">Start Round 1</button></div>
+</div>
+</section>
+
+<section id="game" class="screen">
+<div class="panel">
+<h1 id="roundTitle" class="center">Round 1</h1>
+<p id="instructions" class="instructions">Match each English word with its Hebrew translation.</p>
+<div class="stats"><div class="stat">⭐ Score: <span id="score">0</span></div><div class="stat">❤️ Lives: <span id="lives">3</span></div><div class="stat">🔗 Pairs: <span id="pairs">0</span>/<span id="totalPairs">0</span></div></div>
+<div id="message" class="message"></div>
+<div id="grid" class="grid"></div>
+<div class="actions"><button id="restartBtn" class="btn secondary">Restart Round</button><button id="homeBtn" class="btn secondary">Home</button></div>
+</div>
+</section>
+
+<section id="result" class="screen">
+<div class="panel result">
+<div id="resultIcon" class="center result-icon">🎉</div><h2 id="resultTitle">Round Complete!</h2><p id="resultText"></p>
+<div class="actions"><button id="continueBtn" class="btn">Continue to Round 2</button><button id="resultHomeBtn" class="btn secondary">Home</button></div>
+</div>
+</section>
+
+<section id="finish" class="screen">
+<div class="panel result"><div class="center result-icon">🏆</div><h2>Treasure Unlocked!</h2><p id="finalText"></p><div class="actions"><button id="playAgainBtn" class="btn">Play Again</button></div></div>
+</section>
+</div>
 <script>
-const V=[
-['bottom','תחתון','at the lowest part; opposite of top'],
-['chase','מרדף','an attempt to catch someone or something'],
-['coach','לאמן','to teach or train someone'],
-['earthquake','רעידת אדמה','a sudden shaking of the ground'],
-['fire','לפטר','to make someone leave a job'],
-['formal','רשמי','suitable for official or serious occasions'],
-['free','בחינם','without cost or payment'],
-['headquarters','מטה','the main office or center of an organization'],
-['laugh','צחוק','the sound or act of laughing'],
-['look','מראה','an expression or appearance'],
-['or so','בערך','approximately; about'],
-['raw','נא','not cooked or processed'],
-['trick','תעלול','an action meant to deceive or surprise someone'],
-['victim','קורבן','a person harmed by an event or action'],
-['weakness','חולשה','a lack of strength or ability'],
-['(every) once in a while','מפעם לפעם','sometimes; occasionally'],
-['attraction','אטרקציה','something that makes people interested or draws them'],
-['cycle','לרכוב על אופניים','to ride a bicycle'],
-['get in touch','ליצור קשר','to contact someone'],
-['marvelous','מדהים','extremely good or wonderful'],
-['might as well','כדאי כבר','used to say an action is reasonable in a situation'],
-['position','מיקום','a place or location; a particular situation'],
-['shelter','מחסה','a place that gives protection from danger or weather'],
-['side','צד','one of the parts or surfaces of something'],
-['spill','לשפוך','to accidentally cause liquid to flow out'],
-['struggle','מאבק','a difficult fight or effort to achieve something'],
-['subway','רכבת תחתית','an underground railway system'],
-['swear','להישבע','to make a serious promise'],
-['transfer','להעביר','to move from one place, person, or system to another'],
-['via','באמצעות','through or by way of'],
-['cash','לפדות','to exchange a check for money'],
-['cover','לכסות','to put something over something else'],
-['cyberbullying','בריונות ברשת','bullying or harassment using digital technology'],
-['do a good/excellent, etc. job','לעשות עבודה טובה / מצוינת','to do something well'],
-['firm','יציב','strong and not soft; solid'],
-['idiom','ביטוי','a phrase whose meaning differs from its literal words'],
-['in turn','בתורו / לפי התור','one after another; in the proper order'],
-['pace','קצב','the speed at which something happens or someone moves'],
-['reserve','להזמין מראש','to arrange to have something kept for you'],
-['server','שרת','a computer or system that provides information or services'],
-['symbol','סמל','a sign or image that represents an idea'],
-['tight','צמוד','fitting closely and not loose'],
-['touch','מגע','the sense or act of feeling something with the body'],
-['turn (somebody/something) into somebody/something','להפוך מישהו / משהו למישהו / משהו אחר','to change someone or something into another form'],
-['weird','מוזר','strange or unusual'],
-['ambition','שאיפה','a strong desire to achieve something'],
-['be (just) about to do something','לעמוד לעשות משהו','to be going to do something very soon'],
-['beat','קצב','a regular repeated sound or rhythm'],
-['can tell','להיות מסוגל לזהות / להבין','to be able to recognize or understand something'],
-['courage','אומץ','the ability to face fear or difficulty'],
-['enter','להיכנס','to go into a place'],
-['float','לצוף','to stay on the surface of a liquid'],
-['fortune','הון / מזל','a large amount of money or good luck'],
-['log off/out','להתנתק','to leave a computer account or system'],
-['message','הודעה','information sent to another person'],
-['partner','שותף / בת זוג','a person who works or does something with another person'],
-['spread','התפשטות','the act or amount of spreading something over an area'],
-['take pleasure/pride/an interest, etc.','ליהנות / להתגאות / להתעניין','to enjoy, feel proud of, or become interested in something'],
-['terminal','טרמינל','a place where a journey by plane, bus, train, etc. begins or ends'],
-['tight','בחוזקה','closely or firmly'],
-['at his/its, etc. best','במיטבו','in the best condition or form'],
-['cheat','לרמות','to act dishonestly to gain an advantage'],
-['disabled','אנשים עם מוגבלות','people who have a physical or mental disability'],
-['follow','לעקוב / ללכת אחרי','to go after someone or something'],
-['for the sake of something/somebody; for something’s/somebody’s sake','למען משהו / מישהו','for the benefit or purpose of someone or something'],
-['load','להעמיס','to put things into a vehicle, container, or machine'],
-['miss','החטאה','something that fails to hit or reach its target'],
-['punish','להעניש','to make someone suffer a penalty for doing something wrong'],
-['spread','להתפשט / לפזר','to move or cause something to move over a larger area'],
-['suspect','חשוד','a person believed to have committed a crime'],
-['that’s it','זהו','used to say that something is finished or complete'],
-['tough','קשוח','strong and able to deal with difficulty'],
-['wear (something) out or wear out (something)','לשחוק / להתיש','to make something useless or very tired through continued use'],
-['weigh','לשקול','to measure how heavy something is'],
-['whatever','כל דבר שהוא','any thing or things, no matter which'],
-['as a matter of fact','למעשה','used to emphasize the truth of something'],
-['bend','לכופף','to curve something or make it curve'],
-['deposit','הפקדה','money put into a bank account'],
-['disabled','בעל מוגבלות','having a physical or mental disability'],
-['free','חופשי','not controlled or limited; able to act as you choose'],
-['grab','לתפוס','to take or hold something quickly'],
-['here you are/here it is, etc.','הנה לך / הנה זה','used when giving something to someone'],
-['lightly','בעדינות','with little force or weight'],
-['name','שם','a word used to identify a person or thing'],
-['pour','למזוג / לשפוך','to make liquid flow from one container to another'],
-['show up','להופיע','to arrive or appear'],
-['sink','לשקוע','to go down below the surface of water or another liquid'],
-['special offer','מבצע מיוחד','a product or service sold at a lower or special price'],
-['warm','לחמם','to make something warmer'],
-['Who cares?','למי אכפת?','used to say that something is not important'],
-['argue','להתווכח','to disagree with someone and give reasons for your opinion'],
-['capacity','קיבולת','the maximum amount that something can contain or hold'],
-['cure','לרפא','to make an illness or disease go away'],
-['deaf','חירש','unable to hear or having serious difficulty hearing'],
-['escape','בריחה','an act of getting away from a place or situation'],
-['free will','רצון חופשי','the ability to make choices without being forced'],
-['lonely','בודד','unhappy because you are alone or lack companionship'],
-['quit','להפסיק / לפרוש','to stop doing something or leave a job or activity'],
-['shaming','ביוש','the act of making someone feel ashamed or embarrassed'],
-['signal','אות','a sign, sound, or action used to communicate'],
-['strike','להכות','to hit something or someone'],
-['suspect','לחשוד','to believe that something may be true or someone may have done something wrong'],
-['tribe','שבט','a social group united by shared culture, history, or ancestry'],
-['underline','להדגיש בקו תחתון','to draw a line under words'],
-['weather forecast','תחזית מזג האוויר','a report about what the weather is expected to be'],
-['annoy','לעצבן','to make someone slightly angry or irritated'],
-['bold','נועז','brave and confident'],
-['casual','לא רשמי / יומיומי','relaxed and not formal'],
-['cure','תרופה / מרפא','a treatment that makes an illness better or removes it'],
-['debt','חוב','money that is owed to another person or organization'],
-['fare','דמי נסיעה','the money paid for a journey on public transportation'],
-['give up something or give something up','לוותר על משהו','to stop having, doing, or trying something'],
-['layer','שכבה','a level or amount of material covering a surface'],
-['loan','הלוואה','money given to someone with the expectation it will be paid back'],
-['mark','סימן','a small spot, line, or symbol on a surface'],
-['modest','צנוע','not talking proudly about your abilities or achievements'],
-['peaceful','שליו','calm and without violence or disturbance'],
-['race','מרוץ','a competition to see who is fastest'],
-['some kind of','סוג כלשהו של','a type or sort of something'],
-['strengthen','לחזק','to make something stronger']
+const vocab = [
+['bottom','תחתון','at the lowest part; lower'],['chase','מרדף','an attempt to catch someone or something'],['coach','לאמן','to train or teach a person or team'],['earthquake','רעידת אדמה','a sudden shaking of the ground'],['fire','לפטר','to remove someone from a job'],['formal','רשמי','official or suitable for serious occasions'],['free','בחינם','without payment'],['headquarters','מטה','the main office or center of an organization'],['laugh','צחוק','the sound or action of laughing'],['look','מבט','an act of looking at someone or something'],['or so','בערך','approximately; about'],['raw','נא','not cooked'],['trick','טריק; תכסיס','something done to deceive or surprise someone'],['victim','קורבן','a person harmed by an event or action'],['weakness','חולשה','a lack of strength or ability'],['once in a while','מדי פעם','sometimes, but not often'],['attraction','אטרקציה; משיכה','something that attracts people'],['cycle','לרכוב על אופניים','to ride a bicycle'],['get in touch','ליצור קשר','to communicate with someone'],['marvelous','נפלא','extremely good or wonderful'],['might as well','כדאי כבר','used to say that an action is reasonable because there is no better choice'],['position','עמדה; מיקום','a place, role, or situation occupied by someone or something'],['shelter','מחסה','a safe place that protects from danger or bad weather'],['side','צד','one of the surfaces or parts of something'],['spill','לשפוך','to accidentally cause liquid to flow out of a container'],['struggle','מאבק','a difficult effort or fight'],['subway','רכבת תחתית','an underground railway system'],['swear','להישבע','to make a serious promise'],['transfer','להעביר','to move something or someone from one place to another'],['via','דרך','by way of; through'],['cash','לפדות','to exchange a check or similar item for money'],['cover','לכסות','to place something over or on top of something'],['cyberbullying','בריונות ברשת','bullying that happens through digital technology'],['do a good/excellent job','לעשות עבודה טובה/מצוינת','to do something well'],['firm','תקיף','strong and determined; not easily changed'],['idiom','ביטוי; ניב','a common expression whose meaning is not always literal'],['in turn','בתורו; בתורה','one after another'],['pace','קצב','the speed at which something happens or is done'],['reserve','לשמור; להזמין מראש','to keep something for future use or book it in advance'],['server','שרת','a computer that provides services or data to other computers'],['symbol','סמל','a sign or object representing an idea'],['tight','הדוק','fitting closely; not loose'],['touch','מגע','the act or feeling of touching'],['turn somebody/something into somebody/something','להפוך מישהו/משהו למישהו/משהו','to change someone or something into something else'],['weird','מוזר','strange or unusual'],['ambition','שאפתנות; שאיפה','a strong desire to achieve something'],['be just about to do something','לעמוד לעשות משהו','to be going to do something very soon'],['beat','קצב; פעימה','a regular rhythm or repeated movement'],['can tell','יכול לדעת/להבין','to be able to recognize or understand something'],['courage','אומץ','the ability to face fear or difficulty'],['enter','להיכנס','to go into a place'],['float','לצוף','to stay on the surface of a liquid'],['fortune','מזל; הון','luck, especially good luck; or a large amount of money'],['log off/out','להתנתק','to leave a computer system or online account'],['message','הודעה','information sent to another person'],['partner','שותף; בת זוג','a person who works or does something with another person'],['spread','התפשטות','the growth or movement of something over a wider area'],['take pleasure/pride/an interest','ליהנות/להתגאות/להתעניין','to enjoy, feel proud of, or become interested in something'],['terminal','טרמינל; מסוף','a place where journeys begin or end'],['tight','בחוזקה','firmly or closely'],['at his/its best','בשיאו','in the best condition or form possible'],['cheat','לרמות','to act dishonestly to gain an advantage'],['disabled','אדם עם מוגבלות','a person with a disability'],['follow','לעקוב','to go after someone or something'],['for the sake of','למען','for the benefit or purpose of someone or something'],['load','להעמיס','to put something onto or into something'],['miss','החטאה; פספוס','an unsuccessful attempt to hit or catch something'],['punish','להעניש','to make someone suffer a penalty for doing something wrong'],['spread','להתפשט; לפזר','to move over a larger area or cause something to do so'],['suspect','חשוד','a person believed to have committed a crime'],['that’s it','זהו; זה הכל','that is all; nothing more'],['tough','קשה; קשוח','difficult or strong'],['wear something out','לשחוק; להתיש','to make something or someone very tired or damaged through use'],['weigh','לשקול','to measure how heavy something is'],['whatever','כלשהו; לא משנה מה','any or every thing of a particular type; it does not matter what'],['as a matter of fact','למעשה','in fact; actually'],['bend','לכופף','to make something curved or not straight'],['deposit','פיקדון; הפקדה','money placed in a bank or paid as security'],['disabled','בעל מוגבלות','having a disability'],['free','חופשי','not controlled or limited; not occupied'],['grab','לתפוס','to take hold of something quickly'],['here you are/here it is','הנה','used when giving something to someone'],['lightly','בעדינות','gently; not heavily'],['name','שם','a word used to identify a person or thing'],['pour','למזוג','to make a liquid flow from one container into another'],['show up','להופיע','to arrive or become visible'],['sink','לשקוע','to go down below the surface of water'],['special offer','הצעה מיוחדת','a product or service offered at a reduced or special price'],['warm','לחמם','to make something warmer'],['Who cares?','למי אכפת?','used to say that something is not important to you'],['argue','להתווכח','to speak angrily because you disagree with someone'],['capacity','קיבולת; יכולת','the maximum amount something can contain or the ability to do something'],['cure','לרפא','to make an illness or disease go away'],['deaf','חירש','unable to hear'],['escape','בריחה','the act of getting away from a place or danger'],['free will','רצון חופשי','the ability to choose and act freely'],['lonely','בודד','sad because you are alone or feel alone'],['quit','להפסיק; לעזוב','to stop doing something or leave a job/activity'],['shaming','ביוש','the act of making someone feel ashamed'],['signal','אות; סימן','a sign or message that gives information'],['strike','להכות','to hit someone or something'],['suspect','לחשוד','to think that someone may have done something wrong'],['tribe','שבט','a social group with shared culture or ancestry'],['underline','להדגיש; למתוח קו תחת','to draw a line under words'],['weather forecast','תחזית מזג האוויר','a report about what the weather will be like'],['annoy','לעצבן','to make someone slightly angry or bothered'],['bold','נועז; מודגש','brave and confident, or strongly noticeable'],['casual','לא רשמי','relaxed and not formal'],['cure','תרופה; מרפא','a medicine or treatment that cures an illness'],['debt','חוב','money that is owed to someone'],['fare','דמי נסיעה','the price paid for a journey on public transport'],['give up something','לוותר על משהו','to stop having, doing, or trying something'],['layer','שכבה','a level or thickness of material covering something'],['loan','הלוואה','money that is borrowed and must usually be paid back'],['mark','סימן; ציון','a sign, score, or visible indication'],['modest','צנוע','not talking proudly about abilities or achievements'],['peaceful','שליו','calm and without conflict'],['race','מרוץ; תחרות','a competition to see who is fastest'],['some kind of','סוג כלשהו של','a type of something, not specified exactly'],['strengthen','לחזק','to make stronger']
 ];
-const SIZE={easy:[12,20],medium:[30,35],hard:[29,29]};let S={d:null,r:1,score:0,lives:3,pairs:0,matched:0,deck:[],a:null,lock:false};
-const $=x=>document.getElementById(x), sh=a=>[...a].sort(()=>Math.random()-.5);function view(x){['home','game','result'].forEach(y=>$(y).classList.toggle('hide',x!==y))}function map(){let n=[$('n1'),$('n2'),$('n3'),$('n4'),$('n5')];n.forEach(x=>x.className='node locked');n[0].classList.add('done');if(!S.d){n[0].className='node current';return}n[S.r===1?1:2].classList.add('current');if(S.r===2)n[1].classList.add('done');$('ship').style.left=S.r===2?'48%':'24%'}function start(r){S.r=r;S.lives=3;S.matched=0;S.a=null;S.lock=false;let c=SIZE[S.d][r-1],pick=sh(V).slice(0,c);S.pairs=c;S.deck=sh(pick.flatMap((v,i)=>[{t:'w',x:v[0],p:i},{t:'d',x:r===1?v[1]:v[2],p:i}]));$('round').textContent=r+' / 2';$('info').textContent=r===1?'Round 1: Match each English word with its Hebrew translation.':'Round 2: Match each English word with its English definition.';view('game');map();draw();hud()}
-function draw(){$('cards').innerHTML='';S.deck.forEach(c=>{let b=document.createElement('button');b.className='card '+c.t;b.innerHTML='<div class="inner"><div class="face back">🏴‍☠️</div><div class="face front"></div></div>';b.querySelector('.front').textContent=c.x;b.onclick=()=>pick(b,c);$('cards').appendChild(b)})}function pick(el,c){if(S.lock||el.classList.contains('flip')||el.classList.contains('matched'))return;el.classList.add('flip');if(!S.a){S.a={el,c};return}let a=S.a,b={el,c};S.lock=true;if(a.c.p===b.c.p&&a.c.t!==b.c.t){a.el.classList.add('correct','matched');b.el.classList.add('correct','matched');S.score+=5;S.matched++;setTimeout(()=>{S.lock=false;S.a=null;hud();if(S.matched===S.pairs)win()},550)}else{a.el.classList.add('wrong');b.el.classList.add('wrong');S.score-=2;S.lives--;setTimeout(()=>{a.el.classList.remove('flip','wrong');b.el.classList.remove('flip','wrong');S.lock=false;S.a=null;hud();if(S.lives<=0)lose()},700)}hud()}function hud(){$('score').textContent=S.score;$('matched').textContent=S.matched+' / '+S.pairs;$('lives').textContent=S.lives?'❤️'.repeat(S.lives):'0';$('prog').style.width=S.matched/S.pairs*100+'%'}function win(){map();$('icon').textContent=S.r===2?'💎':'🏝️';$('title').textContent=S.r===2?'🏆 Treasure Hunt Complete!':'🏝️ Round Complete!';$('rscore').textContent=S.score+' points';$('text').textContent=S.r===2?'Amazing work! You completed both rounds and found the hidden treasure!':'Great job! You completed this stage. The next island is waiting!';$('cont').classList.toggle('hide',S.r!==1);$('again').classList.toggle('hide',S.r!==2);$('retry').classList.add('hide');$('m1').className=S.r>=1?'now':'';$('m2').className=S.r===2?'now':'';$('m3').className=S.r===2?'done':'';view('result')}function lose(){$('icon').textContent='🏴‍☠️';$('title').textContent='No worries! Try again!';$('rscore').textContent=S.score+' points';$('text').textContent='You ran out of lives in Round '+S.r+'. The treasure is still waiting! Restart this stage and try again.';$('cont').classList.add('hide');$('again').classList.add('hide');$('retry').classList.remove('hide');view('result')}
-S.d='easy'; document.querySelectorAll('.diff').forEach(b=>b.onclick=()=>{document.querySelectorAll('.diff').forEach(x=>x.classList.remove('active'));b.classList.add('active');S.d=b.dataset.d;map()}); $('start').onclick=()=>{if(!S.d)S.d='easy';start(1)};$('restart').onclick=()=>start(S.r);$('retry').onclick=()=>start(S.r);$('cont').onclick=()=>start(2);$('again').onclick=()=>start(1);$('home').onclick=$('rhome').onclick=()=>{S.d=null;view('home');map()};map();
-</script></body></html>
+
+const sizes={easy:[12,20],medium:[30,35],hard:[29,29]};
+let difficulty='easy',round=1,score=0,lives=3,deck=[],first=null,lock=false,matched=0,roundPairs=0;
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');}
+function setDifficulty(level){difficulty=level;document.querySelectorAll('.diff').forEach(b=>b.classList.toggle('selected',b.dataset.level===level));}
+document.querySelectorAll('.diff').forEach(b=>b.addEventListener('click',()=>setDifficulty(b.dataset.level)));
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function startRound(r){round=r;score=0;lives=3;first=null;lock=false;matched=0;const count=sizes[difficulty][r-1];const selected=shuffle(vocab).slice(0,count);roundPairs=count;deck=[];selected.forEach((v,i)=>{deck.push({pair:i,side:'word',text:v[0]});deck.push({pair:i,side:'answer',text:r===1?v[1]:v[2]})});deck=shuffle(deck);$('roundTitle').textContent='Round '+r;$('instructions').textContent=r===1?'Match each English word with its Hebrew translation.':'Match each English word with its English definition.';$('score').textContent=score;$('lives').textContent=lives;$('pairs').textContent=matched;$('totalPairs').textContent=roundPairs;$('message').textContent='';renderCards();show('game');}
+function renderCards(){const g=$('grid');g.innerHTML='';deck.forEach((c,i)=>{const btn=document.createElement('button');btn.className='card';btn.dataset.i=i;btn.innerHTML='<div class="inner"><div class="face back">?</div><div class="face front"></div></div>';btn.querySelector('.front').textContent=c.text;btn.addEventListener('click',()=>flip(i,btn));g.appendChild(btn);});}
+function flip(i,el){if(lock||el.classList.contains('flipped')||el.classList.contains('matched'))return;el.classList.add('flipped');if(first===null){first=i;return}const second=i;lock=true;const a=deck[first],b=deck[second];const cards=document.querySelectorAll('.card');if(a.pair===b.pair&&a.side!==b.side){score+=5;matched++;cards[first].classList.add('correct','matched');cards[second].classList.add('correct','matched');$('message').textContent='Correct! +5 points';updateStats();setTimeout(()=>{cards[first].classList.remove('correct');cards[second].classList.remove('correct');first=null;lock=false;if(matched===roundPairs)finishRound();},500);}else{score-=2;lives--;cards[first].classList.add('wrong');cards[second].classList.add('wrong');$('message').textContent='Not a match. -2 points';updateStats();setTimeout(()=>{cards[first].classList.remove('flipped','wrong');cards[second].classList.remove('flipped','wrong');first=null;lock=false;if(lives<=0)loseRound();},800);}}
+function updateStats(){$('score').textContent=score;$('lives').textContent=lives;$('pairs').textContent=matched;}
+function finishRound(){show('result');$('resultIcon').textContent='🎉';$('resultTitle').textContent='Round '+round+' Complete!';$('resultText').textContent=`Great job! You matched all ${roundPairs} pairs and finished with ${score} points.`;$('continueBtn').style.display=round===1?'inline-block':'none';if(round===2){$('resultText').textContent+= ' You completed the whole game!';$('continueBtn').textContent='Unlock Treasure';}}
+function loseRound(){show('result');$('resultIcon').textContent='💪';$('resultTitle').textContent='No worries! Try again!';$('resultText').textContent='You ran out of lives. Restart this round and try again.';$('continueBtn').style.display='none';}
+$('startBtn').addEventListener('click',()=>startRound(1));
+$('restartBtn').addEventListener('click',()=>startRound(round));
+$('homeBtn').addEventListener('click',()=>show('home'));
+$('resultHomeBtn').addEventListener('click',()=>show('home'));
+$('continueBtn').addEventListener('click',()=>{if(round===1)startRound(2);else{show('finish');$('finalText').textContent=`Amazing! You completed both rounds with ${score} points in the final round.`;}});
+$('playAgainBtn').addEventListener('click',()=>startRound(1));
+</script>
+</body>
+</html>
