@@ -310,4 +310,1305 @@ h1 {
 
 <section id="home" class="panel">
 
-<h2>Choose
+<h2>Choose a Difficulty</h2>
+
+<div class="levels">
+
+<button class="level-btn" onclick="startGame('easy')">
+🟢 Easy
+<span>Round 1: 12 pairs · Round 2: 20 pairs</span>
+</button>
+
+<button class="level-btn" onclick="startGame('medium')">
+🟡 Medium
+<span>Round 1: 30 pairs · Round 2: 35 pairs</span>
+</button>
+
+<button class="level-btn" onclick="startGame('hard')">
+🔴 Hard
+<span>Round 1: 29 pairs · Round 2: 29 pairs</span>
+</button>
+
+</div>
+
+
+<div class="instructions">
+
+<h3>How to Play</h3>
+
+<p>
+<b>1.</b> Choose a difficulty and start the round.
+</p>
+
+<p>
+<b>2.</b> Click two cards: one vocabulary word and one definition.
+</p>
+
+<p>
+<b>3.</b> Correct match = <b>+5 points</b> and the cards turn green.
+</p>
+
+<p>
+<b>4.</b> Wrong match = <b>-2 points</b> and the cards turn red.
+</p>
+
+<p>
+<b>5.</b> Match all pairs to finish the round.
+Your score carries over to the next round.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- GAME SCREEN -->
+
+<section id="game" class="hidden">
+
+<div class="panel">
+
+<div class="topbar">
+
+<div>
+
+<strong id="levelTitle"></strong>
+
+<div id="roundTitle" class="subtitle"></div>
+
+</div>
+
+
+<div class="stats">
+
+<div class="stat">
+⭐ Score:
+<span id="score">0</span>
+</div>
+
+<div class="stat">
+🎯 Matches:
+<span id="matches">0</span> /
+<span id="total">0</span>
+</div>
+
+</div>
+
+
+<button class="control" onclick="goHome()">
+← Menu
+</button>
+
+</div>
+
+
+<div class="progress">
+<i id="progressBar"></i>
+</div>
+
+
+<div id="message" class="message">
+Find the matching word and definition.
+</div>
+
+</div>
+
+
+<div id="board" class="board"></div>
+
+
+<button id="nextBtn"
+class="next hidden"
+onclick="nextRound()">
+Continue →
+</button>
+
+</section>
+
+
+<!-- FINAL SCREEN -->
+
+<section id="final" class="panel final hidden">
+
+<h2>🎉 Game Complete!</h2>
+
+<p>You finished both rounds.</p>
+
+<div class="score-big" id="finalScore">
+0
+</div>
+
+<p>points</p>
+
+<button class="next" onclick="goHome()">
+Play Again
+</button>
+
+</section>
+
+</div>
+
+
+<script>
+
+/* ==========================================
+   VOCABULARY
+========================================== */
+
+const WORDS = [
+
+{
+word:"bottom",
+pos:"adjective",
+definition:"the lowest part of something"
+},
+
+{
+word:"chase",
+pos:"noun",
+definition:"an attempt to catch someone or something"
+},
+
+{
+word:"coach",
+pos:"verb",
+definition:"to train or teach someone to improve a skill"
+},
+
+{
+word:"earthquake",
+pos:"noun",
+definition:"a sudden shaking of the ground caused by movement under the Earth's surface"
+},
+
+{
+word:"fire",
+pos:"verb",
+definition:"to make someone leave their job"
+},
+
+{
+word:"formal",
+pos:"adjective",
+definition:"suitable for an official or serious occasion"
+},
+
+{
+word:"free",
+pos:"adverb",
+definition:"without cost or payment"
+},
+
+{
+word:"headquarters",
+pos:"noun",
+definition:"the main office or center of an organization"
+},
+
+{
+word:"laugh",
+pos:"noun",
+definition:"the sound or act of showing amusement"
+},
+
+{
+word:"look",
+pos:"noun",
+definition:"a person's appearance or the way something appears"
+},
+
+{
+word:"or so",
+pos:"phrase",
+definition:"approximately; about"
+},
+
+{
+word:"raw",
+pos:"adjective",
+definition:"not cooked or not processed"
+},
+
+{
+word:"trick",
+pos:"noun",
+definition:"something done to deceive or surprise someone"
+},
+
+{
+word:"victim",
+pos:"noun",
+definition:"a person who is harmed by an event or action"
+},
+
+{
+word:"weakness",
+pos:"noun",
+definition:"a lack of strength or an area where someone is not strong"
+},
+
+{
+word:"every once in a while",
+pos:"phrase",
+definition:"sometimes; not very often"
+},
+
+{
+word:"attraction",
+pos:"noun",
+definition:"something that makes people interested in or drawn to it"
+},
+
+{
+word:"cycle",
+pos:"verb",
+definition:"to ride a bicycle"
+},
+
+{
+word:"get in touch",
+pos:"phrase",
+definition:"to communicate with someone"
+},
+
+{
+word:"marvelous",
+pos:"adjective",
+definition:"extremely good or wonderful"
+},
+
+{
+word:"might as well",
+pos:"phrase",
+definition:"used to say that an action is a good or reasonable choice"
+},
+
+{
+word:"position",
+pos:"noun",
+definition:"the place where someone or something is located"
+},
+
+{
+word:"shelter",
+pos:"noun",
+definition:"a safe place that protects people from danger or bad weather"
+},
+
+{
+word:"side",
+pos:"noun",
+definition:"one of the surfaces or parts of something"
+},
+
+{
+word:"spill",
+pos:"verb",
+definition:"to accidentally cause liquid to flow out of its container"
+},
+
+{
+word:"struggle",
+pos:"noun",
+definition:"a difficult effort or fight to achieve something"
+},
+
+{
+word:"subway",
+pos:"noun",
+definition:"an underground railway system"
+},
+
+{
+word:"swear",
+pos:"verb",
+definition:"to make a serious promise or use offensive language"
+},
+
+{
+word:"transfer",
+pos:"verb",
+definition:"to move someone or something from one place to another"
+},
+
+{
+word:"via",
+pos:"preposition",
+definition:"by way of; through"
+},
+
+{
+word:"cash",
+pos:"verb",
+definition:"to exchange a check or similar document for money"
+},
+
+{
+word:"cover",
+pos:"verb",
+definition:"to put something over or on top of something else"
+},
+
+{
+word:"cyberbullying",
+pos:"noun",
+definition:"bullying someone through the internet or digital devices"
+},
+
+{
+word:"do a good/excellent job",
+pos:"phrase",
+definition:"to do something well or very well"
+},
+
+{
+word:"firm",
+pos:"adjective",
+definition:"strong and not easily changed"
+},
+
+{
+word:"idiom",
+pos:"noun",
+definition:"a phrase whose meaning is different from the literal meaning of its words"
+},
+
+{
+word:"in turn",
+pos:"phrase",
+definition:"in the correct order, one after another"
+},
+
+{
+word:"pace",
+pos:"noun",
+definition:"the speed at which something happens or someone moves"
+},
+
+{
+word:"reserve",
+pos:"verb",
+definition:"to keep something for a particular person or purpose"
+},
+
+{
+word:"server",
+pos:"noun",
+definition:"a computer or system that provides information or services to other computers"
+},
+
+{
+word:"symbol",
+pos:"noun",
+definition:"a sign, shape, or object that represents an idea or meaning"
+},
+
+{
+word:"tight",
+pos:"adjective",
+definition:"fitting closely and not loose"
+},
+
+{
+word:"touch",
+pos:"noun",
+definition:"the act or sense of feeling something with your body"
+},
+
+{
+word:"turn (somebody/something) into somebody/something",
+pos:"phrase",
+definition:"to change someone or something so that they become something else"
+},
+
+{
+word:"weird",
+pos:"adjective",
+definition:"strange or unusual"
+},
+
+{
+word:"ambition",
+pos:"noun",
+definition:"a strong desire to achieve something"
+},
+
+{
+word:"be (just) about to do something",
+pos:"phrase",
+definition:"to be going to do something very soon"
+},
+
+{
+word:"beat",
+pos:"noun",
+definition:"a regular repeated rhythm or sound"
+},
+
+{
+word:"can tell",
+pos:"phrase",
+definition:"to be able to know or recognize something"
+},
+
+{
+word:"courage",
+pos:"noun",
+definition:"the ability to do something difficult or frightening"
+},
+
+{
+word:"enter",
+pos:"verb",
+definition:"to go into a place"
+},
+
+{
+word:"float",
+pos:"verb",
+definition:"to stay on the surface of a liquid without sinking"
+},
+
+{
+word:"fortune",
+pos:"noun",
+definition:"a large amount of money or great luck"
+},
+
+{
+word:"log off/out",
+pos:"phrase",
+definition:"to leave a computer system or online account"
+},
+
+{
+word:"message",
+pos:"noun",
+definition:"a piece of information sent to someone"
+},
+
+{
+word:"partner",
+pos:"noun",
+definition:"a person who works or does something with another person"
+},
+
+{
+word:"spread",
+pos:"noun",
+definition:"an amount of something placed or extended over a surface"
+},
+
+{
+word:"take pleasure/pride/an interest, etc.",
+pos:"phrase",
+definition:"to enjoy, feel proud of, or become interested in something"
+},
+
+{
+word:"terminal",
+pos:"noun",
+definition:"a place where a journey by plane, train, bus, or ship begins or ends"
+},
+
+{
+word:"tight",
+pos:"adverb",
+definition:"closely or firmly"
+},
+
+{
+word:"at his/its, etc. best",
+pos:"phrase",
+definition:"in the best condition or performance possible"
+},
+
+{
+word:"cheat",
+pos:"verb",
+definition:"to act dishonestly to gain an advantage"
+},
+
+{
+word:"disabled",
+pos:"noun",
+definition:"a person or group of people with disabilities"
+},
+
+{
+word:"follow",
+pos:"verb",
+definition:"to go after someone or something"
+},
+
+{
+word:"for the sake of something/somebody",
+pos:"phrase",
+definition:"for the benefit or purpose of someone or something"
+},
+
+{
+word:"load",
+pos:"verb",
+definition:"to put something into a vehicle, container, or machine"
+},
+
+{
+word:"miss",
+pos:"noun",
+definition:"a feeling of sadness because someone or something is absent"
+},
+
+{
+word:"punish",
+pos:"verb",
+definition:"to make someone suffer a consequence for doing something wrong"
+},
+
+{
+word:"spread",
+pos:"verb",
+definition:"to move or extend over a larger area"
+},
+
+{
+word:"suspect",
+pos:"noun",
+definition:"a person believed to have committed a crime or done something wrong"
+},
+
+{
+word:"that's it",
+pos:"phrase",
+definition:"used to say that something is finished or that there is nothing more"
+},
+
+{
+word:"tough",
+pos:"adjective",
+definition:"strong, difficult, or able to deal with difficult situations"
+},
+
+{
+word:"wear (something) out or wear out (something)",
+pos:"phrase",
+definition:"to use something so much that it becomes damaged or no longer works well"
+},
+
+{
+word:"weigh",
+pos:"verb",
+definition:"to measure how heavy something is"
+},
+
+{
+word:"whatever",
+pos:"determiner",
+definition:"any thing or things, no matter which"
+},
+
+{
+word:"as a matter of fact",
+pos:"phrase",
+definition:"used to introduce a fact that may be surprising or to correct something"
+},
+
+{
+word:"bend",
+pos:"verb",
+definition:"to make something curved or move it from a straight position"
+},
+
+{
+word:"deposit",
+pos:"noun",
+definition:"money put into a bank account"
+},
+
+{
+word:"disabled",
+pos:"adjective",
+definition:"having a physical or mental condition that limits some abilities"
+},
+
+{
+word:"free",
+pos:"adjective",
+definition:"not under the control of another person; able to act as you choose"
+},
+
+{
+word:"grab",
+pos:"verb",
+definition:"to take or hold something suddenly or quickly"
+},
+
+{
+word:"here you are/here it is",
+pos:"phrase",
+definition:"used when giving something to someone"
+},
+
+{
+word:"lightly",
+pos:"adverb",
+definition:"with little force or pressure"
+},
+
+{
+word:"name",
+pos:"noun",
+definition:"a word or words used to identify a person, place, or thing"
+},
+
+{
+word:"pour",
+pos:"verb",
+definition:"to make a liquid flow from one container to another"
+},
+
+{
+word:"show up",
+pos:"phrase",
+definition:"to arrive or appear"
+},
+
+{
+word:"sink",
+pos:"verb",
+definition:"to go down below the surface of water or another liquid"
+},
+
+{
+word:"special offer",
+pos:"phrase",
+definition:"a product or service available at a reduced or special price"
+},
+
+{
+word:"warm",
+pos:"verb",
+definition:"to make something become warmer"
+},
+
+{
+word:"Who cares?",
+pos:"phrase",
+definition:"used to say that something is not important to you"
+},
+
+{
+word:"argue",
+pos:"verb",
+definition:"to speak angrily because you disagree with someone"
+},
+
+{
+word:"capacity",
+pos:"noun",
+definition:"the maximum amount that something can contain or hold"
+},
+
+{
+word:"cure",
+pos:"verb",
+definition:"to make an illness or problem go away"
+},
+
+{
+word:"deaf",
+pos:"adjective",
+definition:"unable or partly unable to hear"
+},
+
+{
+word:"escape",
+pos:"noun",
+definition:"an act of getting away from a place or situation"
+},
+
+{
+word:"free will",
+pos:"phrase",
+definition:"the ability to choose and act without being forced"
+},
+
+{
+word:"lonely",
+pos:"adjective",
+definition:"sad because you are alone or feel that you have no friends"
+},
+
+{
+word:"quit",
+pos:"verb",
+definition:"to stop doing something or leave a job or activity"
+},
+
+{
+word:"shaming",
+pos:"noun",
+definition:"the act of making someone feel ashamed or embarrassed"
+},
+
+{
+word:"signal",
+pos:"noun",
+definition:"a movement, sound, or sign that communicates information"
+},
+
+{
+word:"strike",
+pos:"verb",
+definition:"to hit something or someone"
+},
+
+{
+word:"suspect",
+pos:"verb",
+definition:"to believe that something may be true or that someone may have done something wrong"
+},
+
+{
+word:"tribe",
+pos:"noun",
+definition:"a group of people connected by culture, family, or traditions"
+},
+
+{
+word:"underline",
+pos:"verb",
+definition:"to draw a line under words"
+},
+
+{
+word:"weather forecast",
+pos:"phrase",
+definition:"a report about what the weather is expected to be like"
+},
+
+{
+word:"annoy",
+pos:"verb",
+definition:"to make someone feel slightly angry or irritated"
+},
+
+{
+word:"bold",
+pos:"adjective",
+definition:"brave and confident; not afraid to take risks"
+},
+
+{
+word:"casual",
+pos:"adjective",
+definition:"relaxed and not formal"
+},
+
+{
+word:"cure",
+pos:"noun",
+definition:"a treatment that makes an illness or problem go away"
+},
+
+{
+word:"debt",
+pos:"noun",
+definition:"money that someone owes"
+},
+
+{
+word:"fare",
+pos:"noun",
+definition:"the amount of money paid for a journey on public transportation"
+},
+
+{
+word:"give up something or give something up",
+pos:"phrase",
+definition:"to stop having, doing, or trying something"
+},
+
+{
+word:"layer",
+pos:"noun",
+definition:"a level or thickness of material covering something"
+},
+
+{
+word:"loan",
+pos:"noun",
+definition:"money that is borrowed and must usually be paid back"
+},
+
+{
+word:"mark",
+pos:"noun",
+definition:"a small sign, spot, or visible indication"
+},
+
+{
+word:"modest",
+pos:"adjective",
+definition:"not talking proudly about your abilities or achievements"
+},
+
+{
+word:"peaceful",
+pos:"adjective",
+definition:"calm and without violence or disturbance"
+},
+
+{
+word:"race",
+pos:"noun",
+definition:"a competition to see who is fastest"
+},
+
+{
+word:"some kind of",
+pos:"phrase",
+definition:"a type or sort of something"
+},
+
+{
+word:"strengthen",
+pos:"verb",
+definition:"to make something stronger"
+}
+
+];
+
+
+/* ==========================================
+   GAME SETTINGS
+========================================== */
+
+const ROUND_SIZES = {
+  easy:[12,20],
+  medium:[30,35],
+  hard:[29,29]
+};
+
+
+let level = null;
+let round = 0;
+let score = 0;
+let matches = 0;
+let selected = [];
+let locked = false;
+let available = [];
+
+
+/* ==========================================
+   SHUFFLE
+========================================== */
+
+function shuffle(array) {
+
+  const a = [...array];
+
+  for(let i=a.length-1;i>0;i--) {
+
+    const j=Math.floor(Math.random()*(i+1));
+
+    [a[i],a[j]]=[a[j],a[i]];
+
+  }
+
+  return a;
+}
+
+
+/* ==========================================
+   START GAME
+========================================== */
+
+function startGame(chosen) {
+
+  level = chosen;
+
+  round = 0;
+
+  score = 0;
+
+  available = shuffle(WORDS);
+
+  document
+    .getElementById("home")
+    .classList.add("hidden");
+
+  document
+    .getElementById("final")
+    .classList.add("hidden");
+
+  document
+    .getElementById("game")
+    .classList.remove("hidden");
+
+  startRound();
+}
+
+
+/* ==========================================
+   START ROUND
+========================================== */
+
+function startRound() {
+
+  matches = 0;
+
+  selected = [];
+
+  locked = false;
+
+  const size = ROUND_SIZES[level][round];
+
+  const chosen = available.splice(0,size);
+
+  renderBoard(chosen);
+
+  document.getElementById("levelTitle")
+    .textContent =
+    level[0].toUpperCase()+level.slice(1)+" Level";
+
+  document.getElementById("roundTitle")
+    .textContent =
+    `Round ${round+1} of 2 · Match ${size} pairs`;
+
+  document.getElementById("score")
+    .textContent = score;
+
+  document.getElementById("matches")
+    .textContent = matches;
+
+  document.getElementById("total")
+    .textContent = size;
+
+  document.getElementById("message")
+    .textContent =
+    "Find the matching word and definition.";
+
+  document.getElementById("nextBtn")
+    .classList.add("hidden");
+
+  updateProgress();
+}
+
+
+/* ==========================================
+   CREATE CARDS
+========================================== */
+
+function renderBoard(pairs) {
+
+  const cards = [];
+
+  pairs.forEach((item,index) => {
+
+    cards.push({
+      pair:index,
+      type:"word",
+      content:item.word,
+      item:item
+    });
+
+    cards.push({
+      pair:index,
+      type:"definition",
+      content:item.definition,
+      item:item
+    });
+
+  });
+
+
+  const shuffled = shuffle(cards);
+
+  const board =
+    document.getElementById("board");
+
+  board.innerHTML =
+    shuffled.map((card,index) => `
+
+      <div
+        class="card"
+        data-pair="${card.pair}"
+        data-type="${card.type}"
+        data-index="${index}"
+        onclick="flipCard(this)"
+      >
+
+        <div class="card-inner">
+
+          <div class="face front">
+            ?
+          </div>
+
+          <div class="face back">
+
+            <div class="pos">
+              ${card.type === "word"
+                ? card.item.pos
+                : "definition"}
+            </div>
+
+            <div class="${
+              card.type === "word"
+              ? "word"
+              : "definition"
+            }">
+
+              ${card.content}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `).join("");
+}
+
+
+/* ==========================================
+   FLIP CARD
+========================================== */
+
+function flipCard(card) {
+
+  if(
+    locked ||
+    card.classList.contains("matched") ||
+    card.classList.contains("flipped")
+  ) {
+    return;
+  }
+
+  card.classList.add("flipped");
+
+  selected.push(card);
+
+  if(selected.length === 2) {
+
+    checkMatch();
+
+  }
+}
+
+
+/* ==========================================
+   CHECK MATCH
+========================================== */
+
+function checkMatch() {
+
+  locked = true;
+
+  const [a,b] = selected;
+
+  const correct =
+    a.dataset.pair === b.dataset.pair &&
+    a.dataset.type !== b.dataset.type;
+
+
+  /* CORRECT */
+
+  if(correct) {
+
+    score += 5;
+
+    matches++;
+
+    a.classList.add(
+      "correct",
+      "matched"
+    );
+
+    b.classList.add(
+      "correct",
+      "matched"
+    );
+
+    document.getElementById("message")
+      .textContent =
+      "✨ Correct! +5 points";
+
+    updateUI();
+
+    selected = [];
+
+    locked = false;
+
+
+    if(
+      matches ===
+      Number(
+        document.getElementById("total").textContent
+      )
+    ) {
+
+      finishRound();
+
+    }
+
+  }
+
+
+  /* WRONG */
+
+  else {
+
+    score -= 2;
+
+    a.classList.add("wrong");
+
+    b.classList.add("wrong");
+
+    document.getElementById("message")
+      .textContent =
+      "❌ Not a match! -2 points";
+
+    updateUI();
+
+
+    setTimeout(() => {
+
+      a.classList.remove(
+        "flipped",
+        "wrong"
+      );
+
+      b.classList.remove(
+        "flipped",
+        "wrong"
+      );
+
+      selected = [];
+
+      locked = false;
+
+      document.getElementById("message")
+        .textContent =
+        "Try another pair!";
+
+    },850);
+
+  }
+
+}
+
+
+/* ==========================================
+   UPDATE UI
+========================================== */
+
+function updateUI() {
+
+  document.getElementById("score")
+    .textContent = score;
+
+  document.getElementById("matches")
+    .textContent = matches;
+
+  updateProgress();
+}
+
+
+/* ==========================================
+   PROGRESS BAR
+========================================== */
+
+function updateProgress() {
+
+  const total =
+    Number(
+      document.getElementById("total")
+      .textContent
+    ) || 1;
+
+  document.getElementById("progressBar")
+    .style.width =
+    (matches / total * 100) + "%";
+}
+
+
+/* ==========================================
+   FINISH ROUND
+========================================== */
+
+function finishRound() {
+
+  document.getElementById("message")
+    .textContent =
+    `🎉 Round complete! Score: ${score}`;
+
+
+  if(round === 0) {
+
+    document.getElementById("nextBtn")
+      .textContent =
+      "Start Round 2 →";
+
+    document.getElementById("nextBtn")
+      .classList.remove("hidden");
+
+  }
+
+
+  else {
+
+    setTimeout(() => {
+
+      document.getElementById("game")
+        .classList.add("hidden");
+
+      document.getElementById("final")
+        .classList.remove("hidden");
+
+      document.getElementById("finalScore")
+        .textContent = score;
+
+    },700);
+
+  }
+
+}
+
+
+/* ==========================================
+   NEXT ROUND
+========================================== */
+
+function nextRound() {
+
+  round = 1;
+
+  startRound();
+
+}
+
+
+/* ==========================================
+   RETURN TO MENU
+========================================== */
+
+function goHome() {
+
+  document.getElementById("game")
+    .classList.add("hidden");
+
+  document.getElementById("final")
+    .classList.add("hidden");
+
+  document.getElementById("home")
+    .classList.remove("hidden");
+
+}
+
+</script>
+
+</body>
+</html>
